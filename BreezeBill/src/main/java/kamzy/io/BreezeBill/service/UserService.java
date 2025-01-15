@@ -1,6 +1,7 @@
 package kamzy.io.BreezeBill.service;
 
 import kamzy.io.BreezeBill.Utility.EncryptionHelper;
+import kamzy.io.BreezeBill.Utility.JwtUtil;
 import kamzy.io.BreezeBill.Utility.ValidationHelper;
 import kamzy.io.BreezeBill.model.Users;
 import kamzy.io.BreezeBill.repository.UserRepository;
@@ -17,7 +18,13 @@ public class UserService {
     UserRepository userRepo;
 
     @Autowired
+    JwtUtil jwtUtil;
+
+    @Autowired
     EncryptionHelper encrypt;
+
+    @Autowired
+    WalletService walletService;
 
     @Autowired
     ValidationHelper validate;
@@ -27,12 +34,13 @@ public class UserService {
     String query;
     PreparedStatement statement;
 
-    public boolean loginService(String user_id, String password) {
-        Users user = userRepo.findByIdNumber(user_id);
-        if (user != null){
-            return encrypt.verifyPassword(password, user.getPassword_hash());
+    public String loginService(String user_id, String password) {
+        boolean authUser = authenticateUser(user_id, password);
+        if (authUser){
+            Users user = userRepo.findByIdNumber(user_id);
+            return jwtUtil.generateToken(user);
         }
-        return false;
+        return "Invalid credentials";
     }
 
     public String signupService(Users u) {
@@ -52,7 +60,11 @@ public class UserService {
         userRepo.save(u);
 //        verify user is saved in DB
         Users newUser = userRepo.findByIdNumber(u.getId_number());
-        return newUser!= null? "Signup Successful" : "Error signing you up";
+        if (newUser != null){
+            walletService.createWalletForUser(u.getId_number());
+            return "Signup Successful";
+        }
+        return "Error signing you up";
     }
 
     public Users getUserProfile(String id_number) {
@@ -89,6 +101,14 @@ public class UserService {
 
     public boolean logoutService() {
 
+        return false;
+    }
+
+    public boolean authenticateUser(String user_id, String password){
+        Users user = userRepo.findByIdNumber(user_id);
+        if (user != null){
+            return encrypt.verifyPassword(password, user.getPassword_hash());
+        }
         return false;
     }
 }

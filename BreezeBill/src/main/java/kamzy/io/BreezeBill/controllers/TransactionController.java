@@ -24,9 +24,9 @@ public class TransactionController {
     TransactionService transactServ;
 
     @PostMapping("/create")
-    public ResponseEntity<String> initiateTransaction(@RequestParam int bill_id, @RequestParam int user_id, @RequestBody Payment p){
+    public ResponseEntity<String> initiateTransaction(@RequestBody Payment p){
         json = new JSONObject();
-        String status = transactServ.createTransaction(user_id, bill_id, p);
+        String status = transactServ.createTransaction(p);
         json.put("status", status);
         return new ResponseEntity<>(json.toString(), HttpStatus.OK);
     }

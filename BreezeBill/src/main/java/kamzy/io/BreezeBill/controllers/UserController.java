@@ -2,6 +2,7 @@ package kamzy.io.BreezeBill.controllers;
 
 import kamzy.io.BreezeBill.service.UserService;
 import kamzy.io.BreezeBill.model.Users;
+import kamzy.io.BreezeBill.service.WalletService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,21 +23,25 @@ public class UserController {
 //    C - Signup, R - login, U - Update Password, D - Delete Account
 
     @PostMapping("/signup")
-    public ResponseEntity<JSONObject> signUp(@RequestBody Users u) {
+    public ResponseEntity<String> signUp(@RequestBody Users u) {
         System.out.println(u);
         json = new JSONObject();
         String status = authserv.signupService(u);
         json.put("status", status);
-        return new ResponseEntity<>(json, HttpStatus.OK);
+        return new ResponseEntity<>(json.toString(), HttpStatus.OK);
     }
 
     @GetMapping ("/login")
-    public ResponseEntity<JSONObject> login(@RequestBody Users u) {
-        System.out.println(u.getId_number()+" -- "+u.getPassword_hash());
+    public ResponseEntity<String> login(@RequestParam String id_number, @RequestParam String password) {
+        System.out.println(id_number+" -- "+password);
         json = new JSONObject();
-        boolean status = authserv.loginService(u.getId_number(),u.getPassword_hash());
-        json.put("status", status);
-        return new ResponseEntity<>(json, HttpStatus.OK);
+        String token = authserv.loginService(id_number,password);
+        json.put("token", token);
+        if (token.equals("Invalid credentials")){
+            return ResponseEntity.status(401).body(json.toString());
+        } else {
+            return ResponseEntity.ok(json.toString());
+        }
     }
 
     @GetMapping ("/logout")

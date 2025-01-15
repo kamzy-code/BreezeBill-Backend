@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Payment {
+    private int bill_id;
+    private int user_id;
+    private int wallet_id;
     private double amount;
     private String payment_method;
     private String recipient;

@@ -23,9 +23,9 @@ public class TransactionService {
     @Autowired
     TransactionRepository transactRepo;
 
-    public String createTransaction(int user_id, int bill_id, Payment p) {
+    public String createTransaction(Payment p) {
 //        Get Bill
-        Bills bill = billRepo.getBillByBillIdAndUserId(bill_id, user_id);
+        Bills bill = billRepo.getBillByBillIdAndUserId(p.getBill_id(), p.getUser_id());
         if (bill == null){
             return "Bill not found";
         }
@@ -37,9 +37,10 @@ public class TransactionService {
         if (p.getAmount()<bill.getAmount()){
             return "Insufficient Payment Amount";
         }
+
 //        Create Transaction Object
         Transactions t = new Transactions();
-        t.setUser_id(user_id);
+        t.setUser_id(p.getUser_id());
         t.setAmount(p.getAmount());
         t.setDescription(p.getDescription());
         t.setRelated_bill_id(bill.getBill_id());

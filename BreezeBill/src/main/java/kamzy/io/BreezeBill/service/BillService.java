@@ -21,7 +21,7 @@ public class BillService {
 
     public String createBill(Bills b) {
 //        verify user exists
-        Optional<Users> session_user = userRepo.findById(b.getUser_id());
+        Optional<Users> session_user = userRepo.findById(b.getCreated_by());
         if (session_user.isPresent()){
 //            Check role
 
