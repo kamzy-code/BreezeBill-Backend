@@ -2,6 +2,7 @@ package kamzy.io.BreezeBill.model;
 
 import jakarta.persistence.*;
 import kamzy.io.BreezeBill.Enums.Gender;
+import kamzy.io.BreezeBill.Enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ public class Users {
     private Date date_of_birth;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    private String role;
+    @Enumerated(EnumType.STRING) private UserRole role;
     private Double balance;
     private String faculty;
     private String department;
