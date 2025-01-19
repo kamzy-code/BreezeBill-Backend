@@ -23,16 +23,7 @@ public class Users {
     private String last_name;
     private String id_number;
     private String password_hash;
-    private String phone_number;
-    @Temporal(TemporalType.DATE)
-    private Date date_of_birth;
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
     @Enumerated(EnumType.STRING) private UserRole role;
-    private Double balance;
-    private String faculty;
-    private String department;
-    private String class_year;
 
 }
 

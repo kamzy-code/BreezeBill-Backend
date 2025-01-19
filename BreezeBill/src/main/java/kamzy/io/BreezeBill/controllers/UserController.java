@@ -1,8 +1,8 @@
 package kamzy.io.BreezeBill.controllers;
 
+import kamzy.io.BreezeBill.model.Profile;
 import kamzy.io.BreezeBill.service.UserService;
 import kamzy.io.BreezeBill.model.Users;
-import kamzy.io.BreezeBill.service.WalletService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class UserController {
         return new ResponseEntity<>(json.toString(), HttpStatus.OK);
     }
 
-    @GetMapping ("/login")
+    @PostMapping ("/login")
     public ResponseEntity<String> login(@RequestParam String id_number, @RequestParam String password) {
         System.out.println(id_number+" -- "+password);
         json = new JSONObject();
@@ -69,9 +69,32 @@ public class UserController {
         return new ResponseEntity<>(json.toString(), HttpStatus.OK);
     }
 
-    @GetMapping ("/profile/{id_number}")
-    public ResponseEntity<Users> getUserProfile(@PathVariable String id_number) {
-        Users profile = authserv.getUserProfile(id_number);
+    @PostMapping ("/get-user")
+    public ResponseEntity<Users> getUserDetails(@RequestParam String id_number) {
+        Users user = authserv.getUserDetails(id_number);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PostMapping("/create_profile")
+    public ResponseEntity<String> createProfile(@RequestBody Profile p) {
+        System.out.println(p);
+        json = new JSONObject();
+        String status = authserv.createProfile(p);
+        json.put("status", status);
+        return new ResponseEntity<>(json.toString(), HttpStatus.OK);
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<String> updateProfile(@RequestBody Profile p){
+        json = new JSONObject();
+        String status = authserv.createProfile(p);
+        json.put("status", status);
+        return new ResponseEntity<>(json.toString(), HttpStatus.OK);
+    }
+
+    @PostMapping ("/get-profile")
+    public ResponseEntity<Profile> getUserProfile(@RequestParam String id_number) {
+        Profile profile = authserv.getUserProfile(id_number);
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 

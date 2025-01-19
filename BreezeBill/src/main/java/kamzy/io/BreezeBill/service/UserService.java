@@ -1,21 +1,26 @@
 package kamzy.io.BreezeBill.service;
 
+import kamzy.io.BreezeBill.Enums.UserRole;
 import kamzy.io.BreezeBill.Utility.EncryptionHelper;
 import kamzy.io.BreezeBill.Utility.JwtUtil;
 import kamzy.io.BreezeBill.Utility.ValidationHelper;
+import kamzy.io.BreezeBill.model.Profile;
 import kamzy.io.BreezeBill.model.Users;
+import kamzy.io.BreezeBill.repository.ProfileRepository;
 import kamzy.io.BreezeBill.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;
-import java.util.Optional;
 
 @Service
 public class UserService {
 
     @Autowired
     UserRepository userRepo;
+
+    @Autowired
+    ProfileRepository profileRepository;
 
     @Autowired
     JwtUtil jwtUtil;
@@ -46,7 +51,7 @@ public class UserService {
     public String signupService(Users u) {
 //        validate id_number and password format
         if (!validate.isValidIdNumber(u.getId_number()) || !validate.isValidPassword(u.getPassword_hash())) {
-            throw new IllegalArgumentException("Invalid id number or password format.");
+            return "Invalid id number or password format";
         }
         Users verify_id_number = userRepo.findByIdNumber(u.getId_number());
         if (verify_id_number != null){
@@ -56,6 +61,7 @@ public class UserService {
 //        hash password and store to user object
         String hashPassword = encrypt.hashPassword(u.getPassword_hash());
         u.setPassword_hash(hashPassword);
+        u.setRole(UserRole.USER);
 //        save new user object to DB
         userRepo.save(u);
 //        verify user is saved in DB
@@ -67,7 +73,7 @@ public class UserService {
         return "Error signing you up";
     }
 
-    public Users getUserProfile(String id_number) {
+    public Users getUserDetails(String id_number) {
         return userRepo.findByIdNumber(id_number);
     }
 
@@ -110,5 +116,14 @@ public class UserService {
             return encrypt.verifyPassword(password, user.getPassword_hash());
         }
         return false;
+    }
+
+    public String createProfile(Profile p) {
+        profileRepository.save(p);
+        return "Profile Saved Successfully";
+    }
+
+    public Profile getUserProfile(String idNumber) {
+        return profileRepository.getProfileByIdNumber(idNumber);
     }
 }
