@@ -29,8 +29,13 @@ public class GroupService {
 //        Create new group
         g.setCreated_at(new Date());
         groupRepo.save(g);
+
+//        get created group
         Groupss createdGroup = groupRepo.getGroupByGroupName(g.getGroup_name());
-        if (createdGroup != null) updateMemberCount(g.getGroup_name());
+        if (createdGroup != null) {
+//            add creator to group
+            joinGroup(createdGroup.getCreated_by(), createdGroup.getGroup_id());
+            updateMemberCount(g.getGroup_name());}
         return createdGroup != null ? "Group created successfully" : "Error creating Group";
     }
 
@@ -53,7 +58,7 @@ public class GroupService {
 
 //        check if user is already a member
         User_groups ug = userGroupRepo.getGroupMemberByUserAndGroupId(user_id, group_id);
-        if (ug != null) return "Error, User already a group member";
+        if (ug != null) return "You're already a group member";
 
         User_groups newUG = new User_groups();
         newUG.setUser_id(user_id);
@@ -89,12 +94,15 @@ public class GroupService {
     }
 
 
-
     public void updateMemberCount(String groupName) {
         Groupss group = groupRepo.getGroupByGroupName(groupName);
         if (group != null) {
             group.setMember_count(userGroupRepo.getMemberCount(group.getGroup_id()));
             groupRepo.save(group);
         }
+    }
+
+    public List<Groupss> getAllGroups() {
+        return groupRepo.findAll();
     }
 }

@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Component
 @RestController
-@RequestMapping("api/transaction")
+@RequestMapping("/api/transaction")
 public class TransactionController {
     JSONObject json;
 

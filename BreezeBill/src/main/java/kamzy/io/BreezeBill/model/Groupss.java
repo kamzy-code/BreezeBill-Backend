@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import kamzy.io.BreezeBill.Enums.GroupType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,8 @@ public class Groupss {
     private String group_name;
     private int created_by;
     private String description;
+    private GroupType group_type;
+    private String parent_group;
     private int member_count;
     @Temporal(TemporalType.TIMESTAMP) private Date created_at;
 

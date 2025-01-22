@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @RestController
 @Component
-@RequestMapping("api/groups")
+@RequestMapping("/api/groups")
 public class GroupController {
 
     JSONObject json;
@@ -23,6 +23,7 @@ public class GroupController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createGroup (@RequestBody Groupss group){
+        System.out.println("created by: " + group.getCreated_by());
         json = new JSONObject();
         String status = groupServ.createGroup(group);
         json.put("status", status);
@@ -33,6 +34,12 @@ public class GroupController {
     @GetMapping("/{group_id}")
     public ResponseEntity<Groupss> getGroupDetails (@PathVariable int group_id){
         Groupss groupDetails = groupServ.getGroupDetails(group_id);
+        return new ResponseEntity<>(groupDetails, HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Groupss>> getAllGroup (){
+        List<Groupss> groupDetails = groupServ.getAllGroups();
         return new ResponseEntity<>(groupDetails, HttpStatus.OK);
     }
 

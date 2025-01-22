@@ -123,6 +123,20 @@ public class UserService {
         return "Profile Saved Successfully";
     }
 
+    public String UpdateProfile(Profile p) {
+        Profile profile = profileRepository.getProfileByIdNumber(p.getId_number());
+        profile.setId_number(p.getId_number());
+        profile.setEmail(p.getEmail());
+        profile.setPhone_number(p.getPhone_number());
+        profile.setDate_of_birth(p.getDate_of_birth());
+        profile.setGender(p.getGender());
+        profile.setFaculty(p.getFaculty());
+        profile.setDepartment(p.getDepartment());
+        profile.setClass_year(p.getClass_year());
+        profileRepository.save(profile);
+        return "Profile Saved Successfully";
+    }
+
     public Profile getUserProfile(String idNumber) {
         return profileRepository.getProfileByIdNumber(idNumber);
     }

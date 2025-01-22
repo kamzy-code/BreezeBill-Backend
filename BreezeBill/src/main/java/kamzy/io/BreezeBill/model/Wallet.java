@@ -8,10 +8,7 @@ import kamzy.io.BreezeBill.Enums.WalletStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 @Data
@@ -20,7 +17,8 @@ import java.time.LocalDateTime;
 public class Wallet {
     @Id
     private int wallet_id;
-    private String user_id;
+    private String id_number;
     private double balance;
+    private String code;
     @Enumerated(EnumType.STRING) private WalletStatus wallet_status;
 }

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class WalletService {
@@ -23,19 +22,26 @@ public class WalletService {
     private TransactionRepository transactionRepository;
     public void createWalletForUser(String userId) {
         Wallet wallet = new Wallet();
-        wallet.setUser_id(userId);
+        wallet.setId_number(userId);
         wallet.setBalance(0.00); // Initial balance
         wallet.setWallet_status(WalletStatus.active);
         walletRepository.save(wallet);
     }
 
-    public Wallet getWalletByUserId(String userId) {
-        return walletRepository.getWalletByUserId(userId);
+    public Wallet getWalletByIdNumber(String id_number) {
+        return walletRepository.getWalletByIdNumber(id_number);
+    }
+
+    public String setWalletCode(String IdNumber, String code){
+        Wallet wallet = getWalletByIdNumber(IdNumber);
+        wallet.setCode(code);
+        walletRepository.save(wallet);
+        return "Passcode Saved";
     }
 
     @Transactional
-    public double addFunds(String userId, double amount) {
-        Wallet wallet = getWalletByUserId(userId);
+    public double addFunds(String id_number, double amount) {
+        Wallet wallet = getWalletByIdNumber(id_number);
         wallet.setBalance(wallet.getBalance() + amount);
         walletRepository.save(wallet);
         return wallet.getBalance();
@@ -43,7 +49,7 @@ public class WalletService {
 
     @Transactional
     public double deductFunds(String userId, double amount) {
-        Wallet wallet = getWalletByUserId(userId);
+        Wallet wallet = getWalletByIdNumber(userId);
         if (wallet.getBalance() < amount) {
             throw new InsufficientFundsException("Insufficient funds in wallet.");
         }
@@ -60,13 +66,13 @@ public class WalletService {
     }
 
     public double getWalletBalance(String userId) {
-        Wallet wallet = getWalletByUserId(userId);
+        Wallet wallet = getWalletByIdNumber(userId);
         return wallet.getBalance();
     }
 
     @Transactional
     public String deactivateWallet(String userId) {
-        Wallet wallet = getWalletByUserId(userId);
+        Wallet wallet = getWalletByIdNumber(userId);
         wallet.setWallet_status(WalletStatus.blocked);
         walletRepository.save(wallet);
         return "Wallet deactivated successfully.";
@@ -74,7 +80,7 @@ public class WalletService {
 
     @Transactional
     public String reactivateWallet(String  userId) {
-        Wallet wallet = getWalletByUserId(userId);
+        Wallet wallet = getWalletByIdNumber(userId);
         wallet.setWallet_status(WalletStatus.active);
         walletRepository.save(wallet);
         return "Wallet reactivated successfully.";

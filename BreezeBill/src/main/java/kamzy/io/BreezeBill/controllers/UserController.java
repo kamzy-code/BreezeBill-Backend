@@ -87,7 +87,7 @@ public class UserController {
     @PutMapping("/update-profile")
     public ResponseEntity<String> updateProfile(@RequestBody Profile p){
         json = new JSONObject();
-        String status = authserv.createProfile(p);
+        String status = authserv.UpdateProfile(p);
         json.put("status", status);
         return new ResponseEntity<>(json.toString(), HttpStatus.OK);
     }
