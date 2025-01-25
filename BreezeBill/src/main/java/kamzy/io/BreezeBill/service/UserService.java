@@ -8,6 +8,7 @@ import kamzy.io.BreezeBill.model.Profile;
 import kamzy.io.BreezeBill.model.Users;
 import kamzy.io.BreezeBill.repository.ProfileRepository;
 import kamzy.io.BreezeBill.repository.UserRepository;
+import kamzy.io.BreezeBill.repository.VANRepositrory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,9 @@ public class UserService {
 
     @Autowired
     ValidationHelper validate;
+
+    @Autowired
+    VANService vanService;
 
     @Autowired
     DatabaseService dbs;
@@ -68,6 +72,7 @@ public class UserService {
         Users newUser = userRepo.findByIdNumber(u.getId_number());
         if (newUser != null){
             walletService.createWalletForUser(u.getId_number());
+            vanService.generateVirtualAccount(u.getUser_id());
             return "Signup Successful";
         }
         return "Error signing you up";

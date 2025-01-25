@@ -61,11 +61,10 @@ public class GroupController {
         return new ResponseEntity<>(json.toString(), HttpStatus.OK);
     }
 
-
+    //  returns a list of groups a user belongs to
     @GetMapping("/{user_id}/user-groups")
     public ResponseEntity<List<Groupss>> getUserGroups (@PathVariable int user_id){
         List<Groupss> userGroups = groupServ.getUserGroups(user_id);
         return new ResponseEntity<>(userGroups, HttpStatus.OK);
-//        json.put("User Groups", Objects.requireNonNullElse(userGroups, "Couldn't find any group"));
     }
 }

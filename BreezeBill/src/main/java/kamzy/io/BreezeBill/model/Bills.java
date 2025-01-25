@@ -20,14 +20,17 @@ public class Bills {
     @Id
     private int bill_id;
     private int created_by;    //    created by
+    private int group_id;
     private String bill_name;
-    private double amount;
     private String description;
-    @Enumerated(EnumType.STRING) private BillType bill_type;
-    private String recipient_user;
-    private String recipient_group;
+    private double unit_amount;
+    private double total_amount;
     @Temporal(TemporalType.DATE) private Date due_date;
+    private String payment_account;
+    private String payment_bank;
     @Enumerated(EnumType.STRING) private BillStatus status;
+    @Enumerated(EnumType.STRING) private BillType bill_type;
+    private String recipient_group;
     @Enumerated(EnumType.STRING) private BillCategory bill_category;
 }
 

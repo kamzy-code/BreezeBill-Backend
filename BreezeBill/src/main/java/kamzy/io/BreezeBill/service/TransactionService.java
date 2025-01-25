@@ -34,7 +34,7 @@ public class TransactionService {
             return "Bill already paid";
         }
 //        Verify Amount
-        if (p.getAmount()<bill.getAmount()){
+        if (p.getAmount()<bill.getUnit_amount()){
             return "Insufficient Payment Amount";
         }
 

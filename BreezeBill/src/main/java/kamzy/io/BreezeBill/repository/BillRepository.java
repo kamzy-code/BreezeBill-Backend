@@ -10,7 +10,8 @@ import java.util.List;
 @Repository
 public interface BillRepository extends JpaRepository<Bills, Integer> {
 
-    @Query("SELECT b FROM Bills b WHERE b.created_by = :user_id")
+    @Query("SELECT b FROM Bills b WHERE b.group_id IN (" +
+            "SELECT ug.group_id FROM User_groups ug WHERE ug.user_id = :user_id)")
     List<Bills> getUserBillsByUserId(int user_id);
 
     @Query ("SELECT b FROM Bills b WHERE b.created_by = :user_id AND b.status = 'unpaid'")
