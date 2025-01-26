@@ -1,7 +1,9 @@
 package kamzy.io.BreezeBill.model;
 
 import jakarta.persistence.*;
+import kamzy.io.BreezeBill.Enums.PaymentMethod;
 import kamzy.io.BreezeBill.Enums.TransactionStatus;
+import kamzy.io.BreezeBill.Enums.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +19,14 @@ import java.util.Date;
 public class Transactions {
     @Id
     private int transaction_id;
-    private int user_id;
+    private int sender_id;
+    private int receiver_id;
+    @Enumerated(EnumType.STRING) private TransactionType type;
     private double amount;
     private String description;
+    @Enumerated(EnumType.STRING) private PaymentMethod payment_method;
     private int related_bill_id;
-    @Temporal(TemporalType.TIMESTAMP) private Date created_at;
     @Enumerated(EnumType.STRING) private TransactionStatus status;
+    @Temporal(TemporalType.TIMESTAMP) private Date created_at;
 }
 

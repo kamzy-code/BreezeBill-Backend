@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface User_groupsRepository extends JpaRepository<User_groups, Integer> {
 
@@ -13,4 +15,8 @@ public interface User_groupsRepository extends JpaRepository<User_groups, Intege
 
     @Query("SELECT COUNT(ug.user_id) FROM User_groups ug WHERE ug.group_id = :group_id")
     int getMemberCount(int group_id);
+
+    @Query("SELECT ug.user_id FROM User_groups ug WHERE ug.group_id = :groupId")
+    List<Integer> findUserIdsByGroupId(int groupId);
+
 }

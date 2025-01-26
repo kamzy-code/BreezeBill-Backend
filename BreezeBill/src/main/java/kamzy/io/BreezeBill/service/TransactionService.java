@@ -40,7 +40,7 @@ public class TransactionService {
 
 //        Create Transaction Object
         Transactions t = new Transactions();
-        t.setUser_id(p.getUser_id());
+        t.setSender_id(p.getUser_id());
         t.setAmount(p.getAmount());
         t.setDescription(p.getDescription());
         t.setRelated_bill_id(bill.getBill_id());

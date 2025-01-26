@@ -3,6 +3,7 @@ package kamzy.io.BreezeBill.repository;
 import kamzy.io.BreezeBill.model.Virtual_account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -16,4 +17,7 @@ public interface VANRepositrory extends JpaRepository<Virtual_account, Integer> 
 
     @Query("SELECT CONCAT(u.last_name, ' ',u.first_name) FROM Users u JOIN Virtual_account v ON u.user_id = v.user_id WHERE v.virtual_account_number = :accountNumber")
     String findUserNameByAccountNumber(String accountNumber);
+
+    @Query("SELECT v.user_id FROM Virtual_account v WHERE v.virtual_account_number = :accountNumber")
+    Integer findUserIdByAccountNumber(String accountNumber);
 }

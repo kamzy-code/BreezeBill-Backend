@@ -32,6 +32,10 @@ public class WalletService {
         return walletRepository.getWalletByIdNumber(id_number);
     }
 
+    public Wallet getWalletByUserId(int user_id) {
+        return walletRepository.getWalletByUserId(user_id);
+    }
+
     public String setWalletCode(String IdNumber, String code){
         Wallet wallet = getWalletByIdNumber(IdNumber);
         wallet.setCode(code);
@@ -40,16 +44,16 @@ public class WalletService {
     }
 
     @Transactional
-    public double addFunds(String id_number, double amount) {
-        Wallet wallet = getWalletByIdNumber(id_number);
+    public double addFunds(int id_number, double amount) {
+        Wallet wallet = getWalletByUserId(id_number);
         wallet.setBalance(wallet.getBalance() + amount);
         walletRepository.save(wallet);
         return wallet.getBalance();
     }
 
     @Transactional
-    public double deductFunds(String userId, double amount) {
-        Wallet wallet = getWalletByIdNumber(userId);
+    public double deductFunds(int userId, double amount) {
+        Wallet wallet = getWalletByUserId(userId);
         if (wallet.getBalance() < amount) {
             throw new InsufficientFundsException("Insufficient funds in wallet.");
         }
@@ -59,7 +63,7 @@ public class WalletService {
     }
 
     @Transactional
-    public String transferFunds(String senderUserId, String recipientUserId, double amount) {
+    public String transferFunds(int senderUserId, int recipientUserId, double amount) {
         deductFunds(senderUserId, amount);
         addFunds(recipientUserId, amount);
         return "Transfer successful!";

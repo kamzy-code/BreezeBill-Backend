@@ -22,4 +22,7 @@ public interface BillRepository extends JpaRepository<Bills, Integer> {
 
     @Query("SELECT b FROM Bills b WHERE b.bill_id = :bill_id AND b.created_by = :user_id")
     Bills getBillByBillIdAndUserId(int bill_id, int user_id);
+
+    @Query("SELECT b FROM Bills b WHERE b.created_at = (SELECT MAX(b2.created_at) FROM Bills b2)")
+    Bills findByBillTimestamp();
 }

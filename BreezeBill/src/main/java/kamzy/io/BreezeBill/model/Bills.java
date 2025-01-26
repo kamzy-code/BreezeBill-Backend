@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -32,5 +34,6 @@ public class Bills {
     @Enumerated(EnumType.STRING) private BillType bill_type;
     private String recipient_group;
     @Enumerated(EnumType.STRING) private BillCategory bill_category;
+    private LocalDateTime created_at;
 }
 

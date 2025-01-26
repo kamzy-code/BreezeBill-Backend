@@ -41,4 +41,8 @@ public class VANService {
            return "Account not found";
         }
     }
+
+    public int getUserIdByAccountNumber(String accountNumber){
+        return vanRepositrory.findUserIdByAccountNumber(accountNumber);
+    }
 }

@@ -20,5 +20,6 @@ public class Wallet {
     private String id_number;
     private double balance;
     private String code;
+    private int user_id;
     @Enumerated(EnumType.STRING) private WalletStatus wallet_status;
 }
