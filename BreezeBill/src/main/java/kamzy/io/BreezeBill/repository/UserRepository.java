@@ -11,6 +11,9 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
     @Query("SELECT u FROM Users u WHERE u.id_number = :id_number")
     Users findByIdNumber(String id_number);
 
+    @Query("SELECT CONCAT(u.last_name, ' ',u.first_name) FROM Users u WHERE u.user_id = :userId")
+    String findUserNameById(int userId);
+
 //    @Query("SELECT u FROM Users u WHERE u.user_id = :user_id")
 //    Users findByUserId(int user_id);
 

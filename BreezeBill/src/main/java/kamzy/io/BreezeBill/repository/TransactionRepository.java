@@ -15,9 +15,9 @@ public interface TransactionRepository extends JpaRepository<Transactions, Integ
     @Query("SELECT t FROM Transactions t WHERE t.transaction_id = :transaction_id")
     Transactions getTransactionByID (int transaction_id);
 
-    @Query("SELECT t FROM Transactions t WHERE t.sender_id = :user_id")
+    @Query("SELECT t FROM Transactions t WHERE t.sender_id = :user_id OR t.receiver_id = :user_id")
     List<Transactions> getTransactionsByUserId(int user_id);
 
-    @Query("SELECT t FROM Transactions t WHERE t.sender_id = :user_id")
+    @Query("SELECT t FROM Transactions t WHERE t.sender_id = :user_id OR t.receiver_id = :user_id")
     List<Transactions> getTransactionsByUserIdOrderByDate(int user_id, Sort sort);
 }

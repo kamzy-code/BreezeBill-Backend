@@ -31,9 +31,9 @@ public class TransactionController {
         return new ResponseEntity<>(json.toString(), HttpStatus.OK);
     }
 
-    @GetMapping("/get-transactions/{user_id}")
+    @GetMapping("/get/{user_id}")
     public ResponseEntity<List<Transactions>> getUserTransactions(@PathVariable int user_id){
-        List<Transactions> transactionList = transactServ.getUserTransactionsByUserId(user_id);
+        List<Transactions> transactionList = transactServ.getTransactionHistory(user_id);
         return new ResponseEntity<>(transactionList, HttpStatus.OK);
     }
 

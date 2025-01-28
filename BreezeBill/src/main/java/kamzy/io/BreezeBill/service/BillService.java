@@ -99,19 +99,24 @@ public class BillService {
                 .orElseThrow(() -> new ResourceNotFoundException("Bill not found."));
 
         int receiverId = vanService.getUserIdByAccountNumber(bill.getPayment_account());
+
+        // Step 3: Prevent self-transfer
+        if (senderId == receiverId) {
+            throw new IllegalArgumentException("You cannot transfer money to your own account.");
+        }
         Wallet receiverWallet = walletService.getWalletByUserId(receiverId);
         if (receiverWallet == null) {
             throw new ResourceNotFoundException("Receiver's wallet not found.");
         }
 
-        // Step 3: Deduct from sender and credit receiver
+        // Step 4: Deduct from sender and credit receiver
         senderWallet.setBalance(senderWallet.getBalance() - amount);
         receiverWallet.setBalance(receiverWallet.getBalance() + amount);
         walletRepository.save(senderWallet);
         walletRepository.save(receiverWallet);
 
 
-        // Step 4: Update UserBill record
+        // Step 5: Update UserBill record
         User_bill userBill = userBillRepository.findByUserIdAndBillId(senderId, billId)
                 .orElseThrow(() -> new ResourceNotFoundException("UserBill record not found."));
         userBill.setStatus(BillStatus.paid);
@@ -121,13 +126,15 @@ public class BillService {
 
         updateBillStatusIfComplete(billId);
 
-        // Step 5: Create and save transaction record
+        // Step 6: Create and save transaction record
         Transactions transaction = new Transactions();
         transaction.setSender_id(senderId);
         transaction.setReceiver_id(receiverId);
         transaction.setType(TransactionType.Bill_payment);
         transaction.setAmount(amount);
         transaction.setDescription(description);
+        transaction.setSender_name(userRepo.findUserNameById(senderId));
+        transaction.setReceiver_name(userRepo.findUserNameById(receiverId));
         transaction.setPayment_method(PaymentMethod.Wallet);
         transaction.setRelated_bill_id(billId);
         transaction.setStatus(TransactionStatus.successful);
@@ -178,7 +185,7 @@ public class BillService {
     }
 
     public void updateBillStatusIfComplete(int billId) {
-        long unpaidCount = userBillRepository.countByBillIdAndStatus(billId, "Unpaid");
+        long unpaidCount = userBillRepository.countByBillIdAndStatus(billId, BillStatus.unpaid);
         if (unpaidCount == 0) {
             Bills bill = billRepo.findById(billId)
                     .orElseThrow(() -> new ResourceNotFoundException("Bill not found."));

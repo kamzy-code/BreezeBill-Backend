@@ -21,6 +21,8 @@ public class Transactions {
     private int transaction_id;
     private int sender_id;
     private int receiver_id;
+    private String sender_name;
+    private String receiver_name;
     @Enumerated(EnumType.STRING) private TransactionType type;
     private double amount;
     private String description;
